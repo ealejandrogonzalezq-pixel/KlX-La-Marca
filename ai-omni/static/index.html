@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KIX AI-Omni</title>
+<style>
+body{font-family:system-ui;background:#0a0a0a;color:#fff;margin:0;padding:15px}
+h1{text-align:center;color:#00ff88}
+.card{background:#1a1a1a;border-radius:16px;padding:18px;margin:15px 0;border:1px solid #2a2a2a}
+input,button{width:100%;padding:14px;border-radius:10px;border:none;margin-top:10px;font-size:16px}
+button{background:#00ff88;color:#000;font-weight:bold}
+#r,#r2{background:#111;padding:10px;border-radius:8px;margin-top:10px}
+</style>
+</head>
+<body>
+<h1>🚀 KIX-La-Marca AI-Omni</h1>
+<div class="card">
+<h3>💬 Pregunta de la vida diaria</h3>
+<input id="q" placeholder="Ej: ¿Cómo hacer arroz?">
+<button onclick="preguntar()">Investigar</button>
+<div id="r">Respuesta aquí...</div>
+</div>
+<div class="card">
+<h3>📄 Lector Imagen / Video / PDF</h3>
+<input type="file" id="f">
+<button onclick="subir()">Leer Archivo</button>
+<div id="r2">Info aquí...</div>
+</div>
+<script>
+async function preguntar(){
+ document.getElementById('r').innerText='Investigando...';
+ let fd=new FormData(); fd.append('question',document.getElementById('q').value);
+ let res=await fetch('/ask',{method:'POST',body:fd});
+ let data=await res.json();
+ document.getElementById('r').innerText=data.respuesta;
+}
+async function subir(){
+ document.getElementById('r2').innerText='Leyendo...';
+ let fd=new FormData(); fd.append('file',document.getElementById('f').files[0]);
+ let res=await fetch('/read_file',{method:'POST',body:fd});
+ let data=await res.json();
+ document.getElementById('r2').innerText=data.archivo+' - '+data.mensaje;
+}
+</script>
+</body>
+</html>
